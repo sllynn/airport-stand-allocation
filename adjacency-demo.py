@@ -19,6 +19,7 @@ from pydantic import BaseModel
 
 # COMMAND ----------
 
+
 class Stand(BaseModel):
     stand_id: str
 
@@ -128,19 +129,19 @@ for stand, intervals in intervals_per_stand.items():
     model.AddNoOverlap(intervals)
 
 
-
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ## Define our adjacency rules
 # MAGIC + This is a list of rules that define the adjacency between stands
-# MAGIC + Each rule is a tuple of (stand_a, stand_b) and two corresponding time windows represnting 
+# MAGIC + Each rule is a tuple of (stand_a, stand_b) and two corresponding time windows represnting
 # MAGIC the intervals during which the stands must not both be occupied simultaneously
 # MAGIC + The time window is a tuple of (start_anchor, start_offset_minutes, end_anchor, end_offset_minutes)
 # MAGIC + The start and end anchors are the time of the start or end of the turn
 # MAGIC + The start and end offsets are the minutes before or after the anchor that the shadow interval should be
 
 # COMMAND ----------
+
 
 class TimeAnchor(str, Enum):
     ARRIVAL = "ARRIVAL"
@@ -176,6 +177,7 @@ class AdjacencyRule(BaseModel):
 
 # COMMAND ----------
 
+
 def _compute_shadow_times(
     arr: int, dep: int, time_constraint: TimeWindowDefinition
 ) -> tuple[int, int]:
@@ -197,6 +199,7 @@ def _compute_shadow_times(
 # MAGIC + These are then added to the model as no-overlap constraints
 
 # COMMAND ----------
+
 
 def apply_adjacency_rules(
     model: cp_model.CpModel,
@@ -248,6 +251,7 @@ def apply_adjacency_rules(
 
         if shadows:
             model.AddNoOverlap(shadows)
+
 
 # COMMAND ----------
 
